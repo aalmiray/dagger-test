@@ -5,9 +5,9 @@ import(
 )
 
 #Image: {    
-   tag: string | *"latest"
+   version: string | *"latest"
    
    docker.#Pull & {
-       source: "jreleaser/jreleaser-slim:\(tag)"
+       source: "jreleaser/jreleaser-slim:\(version)"
    }
 }

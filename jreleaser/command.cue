@@ -1,0 +1,4 @@
+package jreleaser
+
+#Command: #Container & {
+}

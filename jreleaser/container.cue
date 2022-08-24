@@ -6,16 +6,18 @@ import (
 )
 
 #Container: {
-    source:  dagger.#FS
+	source: dagger.#FS
     
-    version: string
+    version: string | *"latest"
+
+    command: string
     
 	args: [...string]
 
 	flags: [string]: (string | true)
 
 	_image: #Image & {
-        tag: version
+        "version": version
     }
 
 	_sourcePath: "/workspace"
@@ -23,8 +25,8 @@ import (
 	_container: docker.#Run & {
 		input:   *_image.output | docker.#Image
 		workdir: _sourcePath
-		command: {
-            name: "jreleaser"
+		"command": {
+            name: command
             "args": args
             "flags": flags
         }

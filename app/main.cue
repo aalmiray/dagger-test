@@ -8,10 +8,9 @@ import (
 
 dagger.#Plan & {
     actions: {
-        //hello: jreleaser.#Version & {
-        //}
         hello: jreleaser.#Config & {
-            source: core.#Source & {
+            source: _source.output
+            _source: core.#Source & {
 	            path: "."
 	        }
         }
