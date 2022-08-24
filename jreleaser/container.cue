@@ -27,7 +27,7 @@ import (
     // Additional command flags
     flags: [string]: (string | true)
 
-	// Environment variables
+    // Environment variables
     env: [string]: string | dagger.#Secret
 
     // --== Private ==--
@@ -36,9 +36,9 @@ import (
         "version": version
     }
 
-	_sourcePath: "/workspace"
+    _sourcePath: "/workspace"
 
-	_container: docker.#Run & {
+    _container: docker.#Run & {
         input:   *_image.output | docker.#Image
         workdir: _sourcePath
         "command": {
