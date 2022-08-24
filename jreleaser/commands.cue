@@ -4,16 +4,8 @@ package jreleaser
 #Command: #Container & {
 }
 
-#Init: #Command & {
-    command: "init"
-}
-
 #Config: #Command & {
     command: "config"
-}
-
-#Template: #Command & {
-    command: "template"
 }
 
 #Download: #Command & {
