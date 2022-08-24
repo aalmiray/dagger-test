@@ -4,8 +4,14 @@ import (
 	"universe.dagger.io/docker"
 )
 
+// Prints the version
 #Version: {
+    // --== Public ==--
+
+    // JReleaser version
     version: string | *"latest"
+
+    // --== Private ==--
 
 	_image: #Image & {
         tag: version

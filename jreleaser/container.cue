@@ -5,16 +5,26 @@ import (
 	"universe.dagger.io/docker"
 )
 
+// Base
 #Container: {
+    // --== Public ==--
+
+    // Source code
 	source: dagger.#FS
     
+    // JReleaser version
     version: string | *"latest"
 
+    // JReleaser command to be executed
     command: string
     
+    // Additional command arguments
 	args: [...string]
 
+    // Additional command flags
 	flags: [string]: (string | true)
+
+    // --== Private ==--
 
 	_image: #Image & {
         "version": version
@@ -37,5 +47,7 @@ import (
         export: directories: "/out": _
 	}
     
+    // --== Outputs ==--
+
     output: _container.export.directories."/out"
 }
