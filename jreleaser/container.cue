@@ -1,9 +1,8 @@
 package jreleaser
 
 import (
-	"dagger.io/dagger"
-    //"dagger.io/dagger/core"
-	"universe.dagger.io/docker"
+    "dagger.io/dagger"
+    "universe.dagger.io/docker"
 )
 
 // Base
@@ -11,7 +10,7 @@ import (
     // --== Public ==--
 
     // Source code
-	source: dagger.#FS
+    source: dagger.#FS
 
     // JReleaser home path
     jreleaser_home?: dagger.#FS
@@ -23,26 +22,26 @@ import (
     command: string
     
     // Additional command arguments
-	args: [...string]
+    args: [...string]
 
     // Additional command flags
-	flags: [string]: (string | true)
+    flags: [string]: (string | true)
 
 	// Environment variables
     env: [string]: string | dagger.#Secret
 
     // --== Private ==--
 
-	_image: #Image & {
+    _image: #Image & {
         "version": version
     }
 
 	_sourcePath: "/workspace"
 
 	_container: docker.#Run & {
-		input:   *_image.output | docker.#Image
-		workdir: _sourcePath
-		"command": {
+        input:   *_image.output | docker.#Image
+        workdir: _sourcePath
+        "command": {
             name:     command
             "args":   args
             "flags":  flags
@@ -50,21 +49,21 @@ import (
         "env":    env & {
             JRELEASER_USER_HOME: "/.jreleaser"
         }
-		mounts: {
+        mounts: {
             "source": {
-			    dest:     _sourcePath
-			    contents: source
+                dest:     _sourcePath
+                contents: source
             }
 
             if jreleaser_home != _|_ {
                 "jreleaser_home": {
-			        dest:     "/.jreleaser"
-			        contents: jreleaser_home
+                    dest:     "/.jreleaser"
+                    contents: jreleaser_home
                 }
             }
-		}
+        }
         export: directories: "out": _
-	}
+    }
     
     // --== Outputs ==--
 

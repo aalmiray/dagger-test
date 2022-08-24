@@ -12,7 +12,7 @@ dagger.#Plan & {
     }
     
     actions: {
-        c: jreleaser.#Checksum & {
+        c: jreleaser.#Sign & {
             source: _source.output
             _source: core.#Source & {
 	            path: "."
