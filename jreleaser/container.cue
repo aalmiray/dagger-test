@@ -24,6 +24,9 @@ import (
     // Additional command flags
 	flags: [string]: (string | true)
 
+	// Environment variables
+    env: [string]: string | dagger.#Secret
+
     // --== Private ==--
 
 	_image: #Image & {
@@ -36,10 +39,11 @@ import (
 		input:   *_image.output | docker.#Image
 		workdir: _sourcePath
 		"command": {
-            name: command
-            "args": args
-            "flags": flags
+            name:     command
+            "args":   args
+            "flags":  flags
         }
+        "env":    env
 		mounts: "source": {
 			dest:     _sourcePath
 			contents: source
