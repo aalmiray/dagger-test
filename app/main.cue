@@ -7,14 +7,20 @@ import (
 )
 
 dagger.#Plan & {
+    client: filesystem: "~/.jreleaser": read: {
+        contents: dagger.#FS
+    }
+    
     actions: {
-        v: jreleaser.#Version & {
-        }
-        c: jreleaser.#Config & {
+        c: jreleaser.#Checksum & {
             source: _source.output
             _source: core.#Source & {
 	            path: "."
 	        }
+            jreleaser_home: client.filesystem."~/.jreleaser".read.contents
+            env: {
+                JRELEASER_PROJECT_VERSION: "1.0.0"
+            }
         }
     }
 }

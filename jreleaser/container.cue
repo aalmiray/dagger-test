@@ -2,6 +2,7 @@ package jreleaser
 
 import (
 	"dagger.io/dagger"
+    //"dagger.io/dagger/core"
 	"universe.dagger.io/docker"
 )
 
@@ -11,6 +12,9 @@ import (
 
     // Source code
 	source: dagger.#FS
+
+    // JReleaser home path
+    jreleaser_home?: dagger.#FS
     
     // JReleaser version
     version: string | *"latest"
@@ -43,15 +47,26 @@ import (
             "args":   args
             "flags":  flags
         }
-        "env":    env
-		mounts: "source": {
-			dest:     _sourcePath
-			contents: source
+        "env":    env & {
+            JRELEASER_USER_HOME: "/.jreleaser"
+        }
+		mounts: {
+            "source": {
+			    dest:     _sourcePath
+			    contents: source
+            }
+
+            if jreleaser_home != _|_ {
+                "jreleaser_home": {
+			        dest:     "/.jreleaser"
+			        contents: jreleaser_home
+                }
+            }
 		}
-        export: directories: "/out": _
+        export: directories: "out": _
 	}
     
     // --== Outputs ==--
 
-    output: _container.export.directories."/out"
+    output: _container.export.directories."out"
 }
