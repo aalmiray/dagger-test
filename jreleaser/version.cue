@@ -14,14 +14,13 @@ import (
     // --== Private ==--
 
 	_image: #Image & {
-        tag: version
+        "version": version
     }
     
 	docker.#Run & {
 		input:   *_image.output | docker.#Image
 		command: {
-            name: "jreleaser"
-            args: ["-V"]
+            name: "-V"
         }
 	}
 }
