@@ -29,6 +29,9 @@ import (
 
     // Environment variables
     env: [string]: string | dagger.#Secret
+    _env: {
+        JRELEASER_USER_HOME: "/.jreleaser"
+    }
 
     // --== Private ==--
 
@@ -44,11 +47,17 @@ import (
         "command": {
             name:     cmd
             "args":   args
-            "flags":  flags
+            "flags":  flags & {
+                "--output-directory": "/out"
+            }
         }
-        "env": env & {
-            JRELEASER_USER_HOME: "/.jreleaser"
+
+        // Defensive copy
+        for k, v in env {
+            _env: "\(k)": v
         }
+        "env": _env
+
         mounts: {
             "source": {
                 dest:     _sourcePath
