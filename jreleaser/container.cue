@@ -19,7 +19,7 @@ import (
     version: string | *"latest"
 
     // JReleaser command to be executed
-    command: string
+    cmd: string
     
     // Additional command arguments
     args: [...string]
@@ -38,15 +38,15 @@ import (
 
     _sourcePath: "/workspace"
 
-    _container: docker.#Run & {
+    docker.#Run & {
         input:   *_image.output | docker.#Image
         workdir: _sourcePath
         "command": {
-            name:     command
+            name:     cmd
             "args":   args
             "flags":  flags
         }
-        "env":    env & {
+        "env": env & {
             JRELEASER_USER_HOME: "/.jreleaser"
         }
         mounts: {
@@ -62,10 +62,5 @@ import (
                 }
             }
         }
-        export: directories: "out": _
     }
-    
-    // --== Outputs ==--
-
-    output: _container.export.directories."out"
 }

@@ -1,57 +1,108 @@
 package jreleaser
 
+import (
+    "dagger.io/dagger"
+)
+
 // Base command
-#Command: #Container & {
+#Command: {
+    // --== Public ==--
+
+    // Source code
+    source: dagger.#FS
+
+    // JReleaser home path
+    jreleaser_home?: dagger.#FS
+
+    // JReleaser version
+    version: string | *"latest"
+
+    // JReleaser command to be executed
+    cmd: string
+
+    // Additional command arguments
+    args: [...string]
+
+    // Additional command flags
+    flags: [string]: (string | true)
+
+    // Environment variables
+    env: [string]: string | dagger.#Secret
+
+    container: #Container & {
+        "jreleaser_home": jreleaser_home
+        "source":         source
+        "version":        version
+        "cmd":            cmd
+        "args":           args
+        "flags":          flags
+        "env":            env
+        export: {
+            directories: "out/jreleaser": _
+            files: {
+                "out/jreleaser/trace.log": _
+                "out/jreleaser/output.properties": _
+            }
+        }
+    }
+    
+    // --== Outputs ==--
+
+    output: {
+        outdir: container.export.directories."out/jreleaser"
+        trace:  container.export.files."out/jreleaser/trace.log"
+        props:  container.export.files."out/jreleaser/output.properties"
+    }
 }
 
 #Config: #Command & {
-    command: "config"
+    cmd: "config"
 }
 
 #Download: #Command & {
-    command: "download"
+    cmd: "download"
 }
 
 #Assemble: #Command & {
-    command: "assemble"
+    cmd: "assemble"
 }
 
 #Changelog: #Command & {
-    command: "changelog"
+    cmd: "changelog"
 }
 
 #Checksum: #Command & {
-    command: "checksum"
+    cmd: "checksum"
 }
 
 #Sign: #Command & {
-    command: "sign"
+    cmd: "sign"
 }
 
 #Upload: #Command & {
-    command: "upload"
+    cmd: "upload"
 }
 
 #Release: #Command & {
-    command: "release"
+    cmd: "release"
 }
 
 #Prepare: #Command & {
-    command: "prepare"
+    cmd: "prepare"
 }
 
 #Package: #Command & {
-    command: "package"
+    cmd: "package"
 }
 
 #Publish: #Command & {
-    command: "publish"
+    cmd: "publish"
 }
 
 #Announce: #Command & {
-    command: "announce"
+    cmd: "announce"
 }
 
 #FullRelease: #Command & {
-    command: "full-release"
+    cmd: "full-release"
 }
