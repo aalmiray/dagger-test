@@ -7,7 +7,7 @@ import (
 #JReleaserCommand: "download" | "assemble" | "changelog" | "checksum" | "sign" | "upload" | "release" | "prepare" | "package" | "publish" | "announce" | "full-release"
 
 // Base command
-#Command: {
+_#Command: {
     // --== Public ==--
 
     // Source code
@@ -31,7 +31,7 @@ import (
     // Environment variables
     env: [string]: string | dagger.#Secret
 
-    container: #Container & {
+    _container: #Container & {
         "jreleaser_home": jreleaser_home
         "source":         source
         "version":        version
@@ -40,71 +40,70 @@ import (
         "flags":          flags
         "env":            env
         export: {
-            directories: "/out/jreleaser": _
+            directories: "/out/jreleaser": dagger.#FS
             files: {
-                "/out/jreleaser/trace.log": _
-                "/out/jreleaser/output.properties": _
+                "/out/jreleaser/trace.log":         string
+                "/out/jreleaser/output.properties": string
             }
         }
     }
-    
+
     // --== Outputs ==--
 
-    // output: {
-    //     outdir: container.export.directories."/out/jreleaser"
-    //     trace:  container.export.files."/out/jreleaser/trace.log"
-    //     props: container.export.files."/out/jreleaser/output.properties"
-    // }
+    output:      _container.output
+    outputDir:   _container.export.directories["/out/jreleaser"]
+    outputLog:   _container.export.files["/out/jreleaser/trace.log"]
+    outputProps: _container.export.files["/out/jreleaser/output.properties"]
 }
 
-#Config: #Command & {
+#Config: _#Command & {
     cmd: "config"
 }
 
-#Download: #Command & {
+#Download: _#Command & {
     cmd: "download"
 }
 
-#Assemble: #Command & {
+#Assemble: _#Command & {
     cmd: "assemble"
 }
 
-#Changelog: #Command & {
+#Changelog: _#Command & {
     cmd: "changelog"
 }
 
-#Checksum: #Command & {
+#Checksum: _#Command & {
     cmd: "checksum"
 }
 
-#Sign: #Command & {
+#Sign: _#Command & {
     cmd: "sign"
 }
 
-#Upload: #Command & {
+#Upload: _#Command & {
     cmd: "upload"
 }
 
-#Release: #Command & {
+#Release: _#Command & {
     cmd: "release"
 }
 
-#Prepare: #Command & {
+#Prepare: _#Command & {
     cmd: "prepare"
 }
 
-#Package: #Command & {
+#Package: _#Command & {
     cmd: "package"
 }
 
-#Publish: #Command & {
+#Publish: _#Command & {
     cmd: "publish"
 }
 
-#Announce: #Command & {
+#Announce: _#Command & {
     cmd: "announce"
 }
 
-#FullRelease: #Command & {
+#FullRelease: _#Command & {
     cmd: "full-release"
 }
